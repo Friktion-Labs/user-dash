@@ -12,22 +12,34 @@ import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
 from dash.dependencies import Input, Output, State
-
+import visdcc
 from datetime import datetime
 import time
+
+
 
 
 #---------VOLT 01 DATA -------------
 
 # Load volt01 unique user data
 v1_uu = pd.read_csv('data/volt01_uu.csv', index_col=0, parse_dates=True)
+# Get latest total uu of each asset
+v1_uu_sum = v1_uu.sort_values('date').groupby('asset').tail(1)
+v1_uu_sum = v1_uu_sum['count'].sum()
+# Date to Index
 v1_uu.index = pd.to_datetime(v1_uu['date'], format = '%Y-%m-%d') # indicate date format from csv
 v1_uu.drop_duplicates(keep='first',inplace=True)
+
+
 
 # Load volt01 avg transaction size data
 v1_ts = pd.read_csv('data/volt01_ts.csv', index_col=0)
 v1_ts = v1_ts.fillna(0)
 v1_ts = v1_ts.sort_values("asset")
+# For Avg tx size
+total_v1_size = (v1_ts['count']*v1_ts['tx_size']).sum()
+total_v1_count = v1_ts['count'].sum()
+
 
 # Load volt01 withdrawal data
 v1_wd = pd.read_csv('data/volt01_wd.csv', index_col=0)
@@ -36,17 +48,26 @@ v1_wd = v1_wd.sort_values("asset")
 
 
 
+
 #---------VOLT 02 DATA -------------
 
 # Load volt02 unique user data
 v2_uu = pd.read_csv('data/volt02_uu.csv', index_col=0, parse_dates=True)
+# Get latest total uu of each asset
+v2_uu_sum = v2_uu.sort_values('date').groupby('asset').tail(1)
+v2_uu_sum = v2_uu_sum['count'].sum()
+# Date to Index
 v2_uu.index = pd.to_datetime(v2_uu['date'], format = '%Y-%m-%d') # indicate date format from csv
 v2_uu.drop_duplicates(keep='first',inplace=True)
+
 
 # Load volt02 avg transaction size data
 v2_ts = pd.read_csv('data/volt02_ts.csv', index_col=0)
 v2_ts = v2_ts.fillna(0)
 v2_ts = v2_ts.sort_values("asset")
+# For Avg tx size
+total_v2_size = (v2_ts['count']*v2_ts['tx_size']).sum()
+total_v2_count = v2_ts['count'].sum()
 
 
 # Load volt02 withdrawal data
@@ -54,14 +75,23 @@ v2_wd = pd.read_csv('data/volt02_wd.csv', index_col=0)
 #v2_wd['date'] = pd.to_datetime(v2_wd['date'], format = '%Y-%m-%d')
 v2_wd = v2_wd.sort_values("asset")
 
+# total uu
+total_uu = v1_uu_sum + v2_uu_sum
+# total avg tx size
+total_avg = (total_v1_size + total_v2_size) / (total_v1_count + total_v2_count)
 
 
+#---------INITIALISE DASH -------------
+
+# external JavaScript files
+external_scripts = ['https://code.jquery.com/jquery-3.3.1.min.js']
 
 # Initialize the app
 # server = Flask(__name__)
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, external_scripts = external_scripts)
 server = app.server
 app.config.suppress_callback_exceptions = True
+
 
 
 # options for the dropdown
@@ -83,8 +113,11 @@ app.layout = html.Div(
                 children=[
                     html.Div(className='four columns div-user-controls',
                             children=[
-                                html.H2('FRIKTION VOLT UNIQUE USERS'),
-                                html.P('Time Series of Unique Users since launch.'),
+                                html.H1(total_uu, className='Count'),
+                                # jQuery
+                                visdcc.Run_js(id = 'counter-users', run = "$('.Count').each(function () {$(this).prop('Counter',0).animate({Counter: $(this).text()},{duration: 1000,easing: 'swing',step: function (now) {$(this).text((Math.ceil(now).toLocaleString('en')));}});});", event = 'null'),
+                                html.H2('FRIKTION VOLT TOTAL UNIQUE USERS'),
+                                html.P('Time Series of Unique Users since launch (Cumulative).'),
                                 html.P('Select Volt & pick one or more asset from the dropdown.'),
                                 html.Div([dcc.Tabs(parent_className='custom-tabs',
                                                     className='div-for-dropdown custom-tabs-container', 
@@ -119,7 +152,7 @@ app.layout = html.Div(
                                                 style={'color': '#1E1E1E'},
                                                 id='tabs', 
                                                 value='tab-1'),
-                                        ])
+                                        ]),
                             ]),
                     html.Div(dcc.Loading(id = "loading-icon", 
                                         children=[
@@ -138,7 +171,10 @@ app.layout = html.Div(
                  children=[
                     html.Div(className='four columns div-user-controls',
                             children=[
-                                html.H2('FRIKTION VOLT AVERAGE TRANSACTION SIZE'),
+                                html.H1(total_avg, className='Value', id='avg-dollar'),
+                                # jQuery
+                                visdcc.Run_js(id = 'counter-value', run = "$('.Value').each(function () {$(this).prop('Counter',0).animate({Counter: $(this).text()},{duration: 1000,easing: 'swing',step: function (now) {$(this).text((Math.ceil(now).toLocaleString('en')));}});});", event = 'null'),
+                                html.H2('AVERAGE TRANSACTION SIZE'),
                                 html.P('Bubble Chart for Avg. Transaction Size (USD)'),
                                 html.P('Select Volt:'),
                                 html.Div([dcc.Tabs(parent_className='custom-tabs',
@@ -194,6 +230,7 @@ app.layout = html.Div(
                 children=[
                     html.Div(className='four columns div-user-controls',
                             children=[
+                                # html.H1('1000', className='Value', id='wd-dollar'),
                                 html.H2('FRIKTION VOLT WITHDRAWALS BY WEEK'),
                                 html.P('Bar Chart for individual asset withdrawal size'),
                                 html.P('Select Week using the dropdown below.'),
@@ -206,8 +243,8 @@ app.layout = html.Div(
                                                                 className='custom-tab',
                                                                 selected_className='custom-tab--selected',
                                                                 children=[
-                                                                    dcc.Dropdown(id='volt01_wd_wkselector', options=get_options(v1_wd['epoch'].unique()),
-                                                                        multi=False, value=v1_wd['epoch'][0], # .sort_values()[0]
+                                                                    dcc.Dropdown(id='volt01_wd_wkselector', options=[{'label': i, 'value': i} for i in sorted(v1_wd['epoch'].unique())],
+                                                                        multi=False, value=v1_wd['epoch'][0], # get_options(v1_wd['epoch'].unique())
                                                                         style={'backgroundColor': '#1E1E1E'},
                                                                         className='assetselector'
                                                                         ),
@@ -219,7 +256,7 @@ app.layout = html.Div(
                                                                 className='custom-tab',
                                                                 selected_className='custom-tab--selected',
                                                                 children=[
-                                                                    dcc.Dropdown(id='volt02_wd_wkselector', options=get_options(v2_wd['epoch'].unique()),
+                                                                    dcc.Dropdown(id='volt02_wd_wkselector', options=[{'label': i, 'value': i} for i in sorted(v2_wd['epoch'].unique())],
                                                                         multi=False, value=v2_wd['epoch'][0], # [.sort_values()[0]]
                                                                         style={'backgroundColor': '#1E1E1E'},
                                                                         className='assetselector'
@@ -484,13 +521,13 @@ def update_graph(selected_wk, tabs_wd):
     if tabs_wd == 'tab_wd-1':
 
         slide_epoch = v1_wd[v1_wd['epoch'] == selected_wk]
-        slide_epoch = slide_epoch.sort_values("asset")
+        slide_epoch = slide_epoch.sort_values("amt_usd", ascending=False)
 
 
         data = go.Bar(
         name='Withdrawal',
         x=slide_epoch["asset"],
-        y=slide_epoch['amt_usd'],
+        y=slide_epoch["amt_usd"],
         opacity=1,
         marker=dict(color = slide_epoch['amt_usd']) #amt_usd
         )
@@ -504,9 +541,10 @@ def update_graph(selected_wk, tabs_wd):
                       plot_bgcolor='rgba(0, 0, 0, 0)',
                       margin={'b': 15},
                       hovermode='x',
-                      autosize=True,
+                      autosize=False,
                       title={'text': 'Volt #01 Withdrawal (USD) By Epoch', 'font': {'color': 'white'}, 'x': 0.5},
-                      yaxis={'range': [slide_epoch['amt_usd'].min(), slide_epoch['amt_usd'].max()], 'categoryorder': 'total ascending'},
+                      xaxis={'range': [-1,10]},
+                      yaxis={'range': [slide_epoch['amt_usd'].min(), slide_epoch['amt_usd'].max()]},
                       transition={'duration': 500}
                 )
                 }
@@ -515,13 +553,13 @@ def update_graph(selected_wk, tabs_wd):
     elif tabs_wd == 'tab_wd-2':
 
         slide_epoch = v2_wd[v2_wd['epoch'] == selected_wk]
-        slide_epoch = slide_epoch.sort_values("asset")
+        slide_epoch = slide_epoch.sort_values("amt_usd", ascending=False)
 
 
         data = go.Bar(
         name='Withdrawal',
         x=slide_epoch["asset"],
-        y=slide_epoch['amt_usd'],
+        y=slide_epoch["amt_usd"],
         opacity=1,
         marker=dict(color = slide_epoch['amt_usd'])
         # color=['#b97af5', '#FF4F00', '#375CB1', '#FF7400', '#BBFD55', '#FFF400', '#FF0056', '#11E02C', '#F11EED', '#56E6FD'])
@@ -535,8 +573,9 @@ def update_graph(selected_wk, tabs_wd):
                       plot_bgcolor='rgba(0, 0, 0, 0)',
                       margin={'b': 15},
                       hovermode='x',
-                      autosize=True,
+                      autosize=False,
                       title={'text': 'Volt #02 Withdrawal (USD) By Epoch', 'font': {'color': 'white'}, 'x': 0.5},
+                      xaxis={'range': [-1,5]},
                       yaxis={'range': [slide_epoch['amt_usd'].min(), slide_epoch['amt_usd'].max()], 'categoryorder': 'total ascending'},
                       transition={'duration': 500}
                 )
