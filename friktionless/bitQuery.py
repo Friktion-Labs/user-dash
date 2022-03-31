@@ -7,7 +7,7 @@ api_key = 'BQYCaXaMZlqZrPCSQVsiJrKtxKRVcSe4'
 class Queries:
     
     # BitQuery query string which returns pending deposit transfers from Friktion users to specific Friktion Volts
-    def volt_pending_deposits(str_dt):
+    def volt_pending_deposits(self, str_dt):
 
         query = '''
 
