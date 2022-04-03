@@ -387,10 +387,9 @@ class transactionEtl:
         instructionAction = "transfer"
         tx_merge_key = "receiverAddress"
         meta_merge_key = "vaultAuthority"
-        out_file = self.deposit_fname
 
         self.parse_base(
-            instructionType, instructionAction, tx_merge_key, meta_merge_key, out_file
+            instructionType, instructionAction, tx_merge_key, meta_merge_key
         )
 
     def parse_withdrawal(self):
@@ -398,10 +397,9 @@ class transactionEtl:
         instructionAction = "burn"
         tx_merge_key = "currencyAddress"
         meta_merge_key = "shareTokenMint"
-        out_file = self.withdraw_fname
 
         self.parse_base(
-            instructionType, instructionAction, tx_merge_key, meta_merge_key, out_file
+            instructionType, instructionAction, tx_merge_key, meta_merge_key
         )
 
     def parse_deposit_cancel(self):
@@ -409,10 +407,9 @@ class transactionEtl:
         instructionAction = "transfer"
         tx_merge_key = "senderAddress"
         meta_merge_key = "vaultAuthority"
-        out_file = self.deposit_cxl_fname
 
         self.parse_base(
-            instructionType, instructionAction, tx_merge_key, meta_merge_key, out_file
+            instructionType, instructionAction, tx_merge_key, meta_merge_key
         )
 
     def parse_withdrawal_cancel(self):
@@ -420,10 +417,9 @@ class transactionEtl:
         instructionAction = "mintTo"
         tx_merge_key = "currencyAddress"
         meta_merge_key = "shareTokenMint"
-        out_file = self.withdraw_cxl_fname
 
         self.parse_base(
-            instructionType, instructionAction, tx_merge_key, meta_merge_key, out_file
+            instructionType, instructionAction, tx_merge_key, meta_merge_key
         )
 
     def parse_claim_withdrawal(self):
@@ -431,10 +427,9 @@ class transactionEtl:
         instructionAction = "transfer"
         tx_merge_key = "senderAddress"
         meta_merge_key = "vaultAuthority"
-        out_file = self.withdraw_claim_fname
 
         self.parse_base(
-            instructionType, instructionAction, tx_merge_key, meta_merge_key, out_file
+            instructionType, instructionAction, tx_merge_key, meta_merge_key
         )
 
     def parse_base(
@@ -442,8 +437,7 @@ class transactionEtl:
         instructionType,
         instructionAction,
         tx_merge_key,
-        meta_merge_key,
-        output_file,
+        meta_merge_key
     ):
         """
         generalized method for parsing transfer data.
@@ -459,13 +453,12 @@ class transactionEtl:
         :instructionAction: type of transfer we are matching towards
         :tx_merge_key: what key in the xfer dataFrame do we want to merge on
         :meta_merge_key: what key in the metadata dataFrame we want to merge on.
-        :output_file: as name suggests
         """
         print(
             datetime.now(),
             "Parsing transfers for instructionType: %s" % instructionType,
         )
-        df = self.get_batched_xfers(instructionType, output_file)
+        df = self.get_batched_xfers(instructionType)
 
         # Target only wrapped SOL entries for SOL vaults
         df = df.query('currencyName != "Solana"')
@@ -491,7 +484,7 @@ class transactionEtl:
         # Tag the row with the instructionType
         df["userAction"] = instructionType
 
-        df.drop_duplicates().to_csv(output_file, index=False)
+        df.drop_duplicates()
         print(datetime.now(), "{} data size: {}".format(instructionType, df.shape[0]))
 
         dw_schema = {
