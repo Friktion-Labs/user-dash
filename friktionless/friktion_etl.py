@@ -195,14 +195,6 @@ class transactionEtl:
 
         return tx_strs
 
-    def get_existing_df(self, fname):
-        """
-        Create output file if doesn't exist and returns a DataFrame
-        """
-        if fname and exists(fname):
-            return pd.read_csv(fname)
-        else:
-            return pd.DataFrame()
 
     @staticmethod
     def instruction_match(instructionData):
@@ -319,14 +311,13 @@ class transactionEtl:
         print(datetime.now(), "final instruction data size: ", df_ix.shape[0])
 
 
-    def get_batched_xfers(self, instructionType, fname):
+    def get_batched_xfers(self, instructionType):
         """
         Get all transfers corresponding to a specific instructionType from Graphql query.
         Batch these queries up b/c the string size is
         too large (curse GraphQL for not supporting joins)
 
         :instructionType: String corresponding to the instruction type of each query.
-        :fname: Name of where the old df is stored
 
         """
 
@@ -375,12 +366,7 @@ class transactionEtl:
 
         print(datetime.now(), df_xfer.shape[0], "transfers retrieved")
 
-        df_old = self.get_existing_df(fname)
-        df_final = df_old.append(df_xfer, ignore_index=True).sort_values(
-            "instructionOrder"
-        )
-
-        return df_final
+        return df_xfer
 
     def parse_deposits(self):
         instructionType = "Deposit"
