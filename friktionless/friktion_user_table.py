@@ -7,8 +7,8 @@ def create_friktion_user_table(friktion_gcloud_project):
     Example
     ----------
     import friktionless as fless
-    fless.create_friktion_user_table('my-gcloud-project')
-    
+    fless.friktion_user_table.create_friktion_user_table('some_project_name')
+
     '''
     # Construct a BigQuery client object.
     client = bigquery.Client()
