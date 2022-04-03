@@ -51,9 +51,14 @@ def create_friktion_deposits_table(friktion_gcloud_project):
 
     '''
 
-    # Create the new dataset within GCP in order to be able to write new tables
-    dataset = bigquery.Dataset(".".join([friktion_gcloud_project, schema_name]))
-    dataset = client.create_dataset(dataset, timeout=30)  # Make an API request.
+    try:
+        # Check to see if the dataset already exists
+        client.get_dataset(".".join([friktion_gcloud_project, schema_name]))
+    except:
+
+        # If the dataset is not found, create the new dataset within GCP in order to be able to write new tables
+        dataset = bigquery.Dataset(".".join([friktion_gcloud_project, schema_name]))
+        dataset = client.create_dataset(dataset, timeout=30)  # Make an API request.
 
     # Name the table we're creating
     table_name = 'deposits'
@@ -78,9 +83,14 @@ def create_friktion_cancel_pending_deposits_table(friktion_gcloud_project):
 
     '''
 
-    # Create the new dataset within GCP in order to be able to write new tables
-    dataset = bigquery.Dataset(".".join([friktion_gcloud_project, schema_name]))
-    dataset = client.create_dataset(dataset, timeout=30)
+    try:
+        # Check to see if the dataset already exists
+        client.get_dataset(".".join([friktion_gcloud_project, schema_name]))
+    except:
+
+        # If the dataset is not found, create the new dataset within GCP in order to be able to write new tables
+        dataset = bigquery.Dataset(".".join([friktion_gcloud_project, schema_name]))
+        dataset = client.create_dataset(dataset, timeout=30)  # Make an API request.
 
     # Name the table we're creating
     table_name = 'deposits_cancel_pending'
@@ -104,9 +114,14 @@ def create_friktion_withdrawals_table(friktion_gcloud_project):
 
     '''
 
-    # Create the new dataset within GCP in order to be able to write new tables
-    dataset = bigquery.Dataset(".".join([friktion_gcloud_project, schema_name]))
-    dataset = client.create_dataset(dataset, timeout=30)
+    try:
+        # Check to see if the dataset already exists
+        client.get_dataset(".".join([friktion_gcloud_project, schema_name]))
+    except:
+
+        # If the dataset is not found, create the new dataset within GCP in order to be able to write new tables
+        dataset = bigquery.Dataset(".".join([friktion_gcloud_project, schema_name]))
+        dataset = client.create_dataset(dataset, timeout=30)  # Make an API request.
     
     # Name the table we're creating
     table_name = 'withdrawals'
@@ -130,9 +145,14 @@ def create_friktion_cancel_pending_withdrawals_table(friktion_gcloud_project):
 
     '''
 
-    # Create the new dataset within GCP in order to be able to write new tables
-    dataset = bigquery.Dataset(".".join([friktion_gcloud_project, schema_name]))
-    dataset = client.create_dataset(dataset, timeout=30)
+    try:
+        # Check to see if the dataset already exists
+        client.get_dataset(".".join([friktion_gcloud_project, schema_name]))
+    except:
+
+        # If the dataset is not found, create the new dataset within GCP in order to be able to write new tables
+        dataset = bigquery.Dataset(".".join([friktion_gcloud_project, schema_name]))
+        dataset = client.create_dataset(dataset, timeout=30)  # Make an API request.
 
     # Name the table we're creating
     table_name = 'withdrawals_cancel_pending'
@@ -156,9 +176,14 @@ def create_friktion_claim_pending_withdrawals_table(friktion_gcloud_project):
 
     '''
 
-    # Create the new dataset within GCP in order to be able to write new tables
-    dataset = bigquery.Dataset(".".join([friktion_gcloud_project, schema_name]))
-    dataset = client.create_dataset(dataset, timeout=30)
+    try:
+        # Check to see if the dataset already exists
+        client.get_dataset(".".join([friktion_gcloud_project, schema_name]))
+    except:
+
+        # If the dataset is not found, create the new dataset within GCP in order to be able to write new tables
+        dataset = bigquery.Dataset(".".join([friktion_gcloud_project, schema_name]))
+        dataset = client.create_dataset(dataset, timeout=30)  # Make an API request.
 
     # Name the table we're creating
     table_name = 'withdrawals_claim_pending'
