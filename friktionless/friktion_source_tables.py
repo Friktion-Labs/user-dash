@@ -23,7 +23,7 @@ schema = [
         bigquery.SchemaField("amount", "FLOAT64"),
         bigquery.SchemaField("instructionAction", "STRING"),
         bigquery.SchemaField("instructionOrder", "STRING"),
-        bigquery.SchemaField("userAddress", "FLOAT64"),
+        bigquery.SchemaField("userAddress", "STRING"),
         bigquery.SchemaField("timestamp", "STRING"),
         bigquery.SchemaField("currencyName", "STRING"),
         bigquery.SchemaField("currencyAddress", "STRING"),
