@@ -496,7 +496,8 @@ class transactionEtl:
 
         # TODO : Go back and make the project-id a parameterized input
         df.to_gbq('solana.{}'.format(dw_schema[instructionType.lower()]), project_id='friktion-dev', if_exists='append')
-        
+
+
 def backfill_source_tables(userAction, date_end=datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")):
 
     # Initializing the start date of the backfill to 2021-12-16. This is the date of the first deposit into friktion.
@@ -517,19 +518,37 @@ def backfill_source_tables(userAction, date_end=datetime.now().strftime("%Y-%m-%
         etl.parse_withdrawal_cancel()
 
 
-'''
-def daily_run(userAction):
-    
+def append_most_recent_transactions(friktion_gcloud_project, userAction):
+
+    sql_file_dict = {
+        'deposit' : 'most_recent_deposit.sql',
+        'cancel_deposit' : 'most_recent_deposit_cancellation.sql',
+        'withdrawal' : 'most_recent_withdrawal.sql',
+        'claim_withdrawal' : 'most_recent_withdrawal_claim.sql',
+        'cancel_pending_withdrawal' : 'most_recent_withdrawal_cancellation.sql'
+    }
+
+    with open ('queries/'+sql_file_dict[userAction]) as query:
+
+        query_string = query.read()
+
+    date_start = pd.read_gbq(query=query_string, project_id=friktion_gcloud_project)['most_recent_txn_ts'][0]
+    date_end=datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    # Instantiate transaction ETL class
+    etl = transactionEtl(date_start, date_end)
+
     if userAction == 'deposit':
-        sql_file = 'most_recent_deposit'
+        etl.parse_deposits()
     elif userAction == 'cancel_deposit':
-        sql_file = 'most_recent_deposit'
+        etl.parse_deposit_cancel()
     elif userAction == 'withdrawal':
-        sql_file = 'most_recent_deposit'
+        etl.parse_withdrawal()
     elif userAction == 'claim_withdrawal':
-        sql_file = 'most_recent_deposit'
+        etl.parse_claim_withdrawal()
     elif userAction == 'cancel_pending_withdrawal':
-        sql_file = 'most_recent_deposit'
-'''
+        etl.parse_withdrawal_cancel()
+
+
 
 
