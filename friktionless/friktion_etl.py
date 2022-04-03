@@ -486,13 +486,15 @@ class transactionEtl:
 
         dw_schema = {
             'withdraw' : 'withdrawals',
-            'cancelpendingwithdrawal' : 'withdrawals_cancelled_pending',
+            'cancelpendingwithdrawal' : 'withdrawals_cancel_pending',
             'claimpendingwithdrawal' : 'withdrawals_claim_pending',
             'deposit' : 'deposits',
-            'cancelpendingdeposit' : 'deposits_cancelled_pending'
+            'cancelpendingdeposit' : 'deposits_cancel_pending'
         }
         
         print(datetime.now(), "Now writing to Google BigQuery")
+
+        # TODO : Go back and make the project-id a parameterized input
         df.to_gbq('solana.{}'.format(dw_schema[instructionType.lower()]), project_id='friktion-dev', if_exists='append')
         
 def backfill_source_tables(userAction, date_end=datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")):
@@ -513,6 +515,21 @@ def backfill_source_tables(userAction, date_end=datetime.now().strftime("%Y-%m-%
         etl.parse_claim_withdrawal()
     elif userAction == 'cancel_pending_withdrawal':
         etl.parse_withdrawal_cancel()
+
+
+'''
+def daily_run(userAction):
     
+    if userAction == 'deposit':
+        sql_file = 'most_recent_deposit'
+    elif userAction == 'cancel_deposit':
+        sql_file = 'most_recent_deposit'
+    elif userAction == 'withdrawal':
+        sql_file = 'most_recent_deposit'
+    elif userAction == 'claim_withdrawal':
+        sql_file = 'most_recent_deposit'
+    elif userAction == 'cancel_pending_withdrawal':
+        sql_file = 'most_recent_deposit'
+'''
 
 
