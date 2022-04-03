@@ -501,7 +501,7 @@ def backfill_source_tables(userAction, date_end=datetime.now().strftime("%Y-%m-%
     date_start = "2021-12-16T00:00:00Z"
 
     # Instantiate transaction ETL class
-    etl = transactionEtl(date_start, date_end, skip_ix_scrape=True)
+    etl = transactionEtl(date_start, date_end)
 
     if userAction == 'deposit':
         etl.parse_deposits()
