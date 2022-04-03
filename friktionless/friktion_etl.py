@@ -45,6 +45,7 @@ class transactionEtl:
         self.batch_size_xfers = batch_size_xfers
         self.skip_ix_scrape = skip_ix_scrape
         
+        self.df_ix = []
         self.friktion_metadata = self.get_friktion_snapshot()
 
     ########################################################################################################
