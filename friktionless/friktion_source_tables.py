@@ -1,5 +1,16 @@
 from google.cloud import bigquery
 
+# Construct a BigQuery client object.
+client = bigquery.Client()
+
+# Name the schema which will contain the tables
+# Any data that is sourced directly from on-chain will live under the solana schema
+schema_name = 'solana'
+
+# Create the new dataset within GCP in order to be able to write new tables
+dataset = bigquery.Dataset(schema_name)
+dataset = client.create_dataset(dataset, timeout=30)  # Make an API request.
+
 
 ''' 
 This is a generalized schema which applies to the five core friktion tables:
@@ -31,9 +42,6 @@ schema = [
         bigquery.SchemaField("userAction", "STRING")
     ]
 
-# Any data that is sourced directly from on-chain will live under the solana schema
-schema_name = 'solana'
-
 
 def create_friktion_deposits_table(friktion_gcloud_project):
     '''
@@ -46,8 +54,6 @@ def create_friktion_deposits_table(friktion_gcloud_project):
     fless.friktion_source_tables.create_friktion_deposits_table('some_project_name')
 
     '''
-    # Construct a BigQuery client object.
-    client = bigquery.Client()
 
     # Name the table we're creating
     table_name = 'deposits'
@@ -71,8 +77,6 @@ def create_friktion_cancel_pending_deposits_table(friktion_gcloud_project):
     fless.friktion_source_tables.create_friktion_cancel_pending_deposits_table('some_project_name')
 
     '''
-    # Construct a BigQuery client object.
-    client = bigquery.Client()
 
     # Name the table we're creating
     table_name = 'deposits_cancel_pending'
@@ -95,8 +99,6 @@ def create_friktion_withdrawals_table(friktion_gcloud_project):
     fless.friktion_source_tables.create_friktion_withdrawals_table('some_project_name')
 
     '''
-    # Construct a BigQuery client object.
-    client = bigquery.Client()
 
     # Name the table we're creating
     table_name = 'withdrawals'
@@ -119,8 +121,6 @@ def create_friktion_cancel_pending_withdrawals_table(friktion_gcloud_project):
     fless.friktion_source_tables.create_friktion_cancel_pending_withdrawals_table('some_project_name')
 
     '''
-    # Construct a BigQuery client object.
-    client = bigquery.Client()
 
     # Name the table we're creating
     table_name = 'withdrawals_cancel_pending'
@@ -143,8 +143,6 @@ def create_friktion_claim_pending_withdrawals_table(friktion_gcloud_project):
     fless.friktion_source_tables.create_friktion_claim_pending_withdrawals_table('some_project_name')
 
     '''
-    # Construct a BigQuery client object.
-    client = bigquery.Client()
 
     # Name the table we're creating
     table_name = 'withdrawals_claim_pending'
