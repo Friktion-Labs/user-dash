@@ -311,6 +311,12 @@ class transactionEtl:
         self.df_ix = df_ix.drop_duplicates(["txSignature", "instructionType"])
         print(datetime.now(), "final instruction data size: ", df_ix.shape[0])
 
+        # Save new data to file
+        df = df_ix
+        df = df.drop_duplicates(["txSignature", "instructionType"])
+        
+        return df
+
 
     def get_batched_xfers(self, instructionType):
         """
