@@ -311,12 +311,6 @@ class transactionEtl:
         self.df_ix = df_ix.drop_duplicates(["txSignature", "instructionType"])
         print(datetime.now(), "final instruction data size: ", df_ix.shape[0])
 
-        # Save new data to file
-        df = df_ix
-        df = df.drop_duplicates(["txSignature", "instructionType"])
-        
-        return df
-
 
     def get_batched_xfers(self, instructionType):
         """
@@ -381,6 +375,8 @@ class transactionEtl:
         tx_merge_key = "receiverAddress"
         meta_merge_key = "vaultAuthority"
 
+        if not self.skip_ix_scrape:
+            self.get_ix_batch()
         self.parse_base(
             instructionType, instructionAction, tx_merge_key, meta_merge_key
         )
@@ -391,6 +387,8 @@ class transactionEtl:
         tx_merge_key = "currencyAddress"
         meta_merge_key = "shareTokenMint"
 
+        if not self.skip_ix_scrape:
+            self.get_ix_batch()
         self.parse_base(
             instructionType, instructionAction, tx_merge_key, meta_merge_key
         )
@@ -401,6 +399,8 @@ class transactionEtl:
         tx_merge_key = "senderAddress"
         meta_merge_key = "vaultAuthority"
 
+        if not self.skip_ix_scrape:
+            self.get_ix_batch()
         self.parse_base(
             instructionType, instructionAction, tx_merge_key, meta_merge_key
         )
@@ -411,6 +411,8 @@ class transactionEtl:
         tx_merge_key = "currencyAddress"
         meta_merge_key = "shareTokenMint"
 
+        if not self.skip_ix_scrape:
+            self.get_ix_batch()
         self.parse_base(
             instructionType, instructionAction, tx_merge_key, meta_merge_key
         )
@@ -421,6 +423,8 @@ class transactionEtl:
         tx_merge_key = "senderAddress"
         meta_merge_key = "vaultAuthority"
 
+        if not self.skip_ix_scrape:
+            self.get_ix_batch()
         self.parse_base(
             instructionType, instructionAction, tx_merge_key, meta_merge_key
         )
