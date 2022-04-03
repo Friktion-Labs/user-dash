@@ -70,3 +70,4 @@ $ (friktion) johnreyes@pop-os:~/projects/user-dash$ python
 """
 
 import friktionless.bitQuery
+import friktionless.friktion_user_table
