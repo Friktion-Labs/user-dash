@@ -528,7 +528,7 @@ def append_most_recent_transactions(friktion_gcloud_project, userAction):
         'cancel_pending_withdrawal' : 'most_recent_withdrawal_cancellation.sql'
     }
 
-    with open ('queries/'+sql_file_dict[userAction]) as query:
+    with open ('friktionless/queries/'+sql_file_dict[userAction]) as query:
 
         query_string = query.read()
 
@@ -540,7 +540,7 @@ def append_most_recent_transactions(friktion_gcloud_project, userAction):
 
     if userAction == 'deposit':
         etl.parse_deposits()
-    elif userAction == 'cancel_deposit':
+    elif userAction == 'cancel_pending_deposit':
         etl.parse_deposit_cancel()
     elif userAction == 'withdrawal':
         etl.parse_withdrawal()
