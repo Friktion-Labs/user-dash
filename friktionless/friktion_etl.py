@@ -508,7 +508,7 @@ def backfill_source_tables(userAction, date_end=datetime.now().strftime("%Y-%m-%
 
     if userAction == 'deposit':
         etl.parse_deposits()
-    elif userAction == 'cancel_deposit':
+    elif userAction == 'cancel_pending_deposit':
         etl.parse_deposit_cancel()
     elif userAction == 'withdrawal':
         etl.parse_withdrawal()
@@ -522,7 +522,7 @@ def append_most_recent_transactions(friktion_gcloud_project, userAction):
 
     sql_file_dict = {
         'deposit' : 'most_recent_deposit.sql',
-        'cancel_deposit' : 'most_recent_deposit_cancellation.sql',
+        'cancel_pending_deposit' : 'most_recent_deposit_cancellation.sql',
         'withdrawal' : 'most_recent_withdrawal.sql',
         'claim_withdrawal' : 'most_recent_withdrawal_claim.sql',
         'cancel_pending_withdrawal' : 'most_recent_withdrawal_cancellation.sql'
