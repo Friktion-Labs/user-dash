@@ -32,7 +32,7 @@ def create_net_funds_flow_chart(friktion_gcloud_project, product_name):
             'net_deposit_amt',
             axis=alt.Axis(
                 title='Gross Funds Flow',
-                format='$,.0f'
+                format=',.0f'
                 )
         ),
         color = alt.value('green')
@@ -54,7 +54,7 @@ def create_net_funds_flow_chart(friktion_gcloud_project, product_name):
             'net_withdrawal_amt_neg',
             axis=alt.Axis(
                 title='Gross Funds Flow',
-                format='$,.0f'
+                format=',.0f'
                 )
         ),
         color = alt.value('red')
@@ -76,7 +76,7 @@ def create_net_funds_flow_chart(friktion_gcloud_project, product_name):
             'net_funds_flow',
             axis=alt.Axis(
                 title='Net Funds Flow',
-                format='$,.0f'
+                format=',.0f'
                 )
         ),
         color = alt.value('black')
