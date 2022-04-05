@@ -72,3 +72,4 @@ $ (friktion) johnreyes@pop-os:~/projects/user-dash$ python
 import friktionless.friktion_user_table
 import friktionless.friktion_source_tables
 import friktionless.friktion_etl
+import friktionless.analytics
