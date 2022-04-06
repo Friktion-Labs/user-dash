@@ -20,11 +20,12 @@ select
     b.strategy,
     b.volt_number,
     b.asset,
+    b.voltage,
     e.epoch as first_epoch,
     count(b.user_address) as epoch_user_count
 from base b
     left join analytics.epoch e on e.globalId = b.globalId and b.first_deposit_ts between timestamp_seconds(e.start) and timestamp_seconds(e.end)
-group by 1,2,3,4,5
+group by 1,2,3,4,5,6
 )
 
 select
@@ -32,10 +33,13 @@ select
     a.strategy,
     a.volt_number,
     a.asset,
+    a.voltage,
     a.first_epoch as epoch,
-    sum(a.epoch_user_count) over (partition by a.product_name, a.strategy, a.volt_number, a.asset order by a.first_epoch asc) as cumulative_unique_users
+    a.epoch_user_count as epoch_new_users,
+    sum(a.epoch_user_count) over (partition by a.product_name, a.strategy, a.volt_number, a.asset, a.voltage order by a.first_epoch asc) as cumulative_unique_users
 from agg a
 where
     ('All' = '{strategy}' or a.strategy = '{strategy}') and
-    ('All' = '{volt_number}' or a.volt_number = '{volt_number}') and
-    ('All' = '{asset}' or a.asset = '{asset}')
+    ('All' = '{volt_number}' or cast(a.volt_number as string) = '{volt_number}') and
+    ('All' = '{asset}' or a.asset = '{asset}') and
+    ('All' = '{voltage}' or a.voltage = '{voltage}')
