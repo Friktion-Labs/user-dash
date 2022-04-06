@@ -1,6 +1,10 @@
-import streamlit as st
-import altair as alt
 import friktionless as fless
+import streamlit as st
 
+st.set_page_config(
+    title='Friktion Analytics Hub',
+    layout='centered',
+    initial_sidebar_state='collapsed'
+    )
 
-fless.analytics.charts.create_net_funds_flow_chart('friktion-dev','Covered Call - SOL - Low Voltage')
+st.title('Friktion Analytics Hub')
