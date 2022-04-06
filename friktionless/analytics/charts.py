@@ -231,7 +231,7 @@ def create_cumulative_users_chart(friktion_gcloud_project, strategy, volt_number
         ]
     ).properties(
         height=400,
-        width=560
+        width=525
     )
 
     new_users = alt.Chart(df).mark_bar().encode(
@@ -282,7 +282,7 @@ def create_cumulative_users_chart(friktion_gcloud_project, strategy, volt_number
         ]
     ).properties(
         height=400,
-        width=560
+        width=525
     )
     
     # Combine charts together into a single view
