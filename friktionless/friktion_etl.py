@@ -6,7 +6,6 @@ Python script to scrape Friktion User Data from Bitquery GraphQL API.
 from ast import parse
 import json
 import requests
-import requests
 import traceback
 import time
 
