@@ -9,7 +9,7 @@ def create_friktion_table(friktion_gcloud_project, schema_name='solana', table_n
     client = bigquery.Client()
 
     # Any data that is sourced directly from on-chain will live under the solana schema
-    schema_name = 'solana'
+    # schema_name = 'solana'
 
 
     ''' 
