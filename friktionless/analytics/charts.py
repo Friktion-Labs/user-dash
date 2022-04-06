@@ -177,7 +177,14 @@ def create_cumulative_users_chart(friktion_gcloud_project, strategy, volt_number
         query_string = query.read()
 
     # Read in data from Google BigQuery
-    df = pd.read_gbq(query=query_string.format(strategy=strategy, volt_number=volt_number, asset=asset, voltage=voltage), project_id=friktion_gcloud_project)
+    df = pd.read_gbq(
+        query=query_string.format(
+            ",".join(["'"+x+"'" for x in strategy]), 
+            ",".join(["'"+x+"'" for x in volt_number]), 
+            ",".join(["'"+x+"'" for x in asset]), 
+            ",".join(["'"+x+"'" for x in voltage])
+            ), project_id=friktion_gcloud_project
+    )
 
     # Create Altair charts
     cumulative_users = alt.Chart(df).mark_line(point=True).encode(
@@ -207,7 +214,7 @@ def create_cumulative_users_chart(friktion_gcloud_project, strategy, volt_number
             'product_name',
             legend=alt.Legend(
                 orient='bottom',
-                columns=7,
+                columns=6,
                 title='Product Name'
             )
         ),
@@ -254,7 +261,7 @@ def create_cumulative_users_chart(friktion_gcloud_project, strategy, volt_number
             'product_name',
             legend=alt.Legend(
                 orient='bottom',
-                columns=3,
+                columns=6,
                 title='Product Name'
             )
         ),
