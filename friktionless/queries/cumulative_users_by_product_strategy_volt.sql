@@ -39,7 +39,7 @@ select
     sum(a.epoch_user_count) over (partition by a.product_name, a.strategy, a.volt_number, a.asset, a.voltage order by a.first_epoch asc) as cumulative_unique_users
 from agg a
 where
-    ('All' = '{strategy}' or a.strategy = '{strategy}') and
-    ('All' = '{volt_number}' or cast(a.volt_number as string) = '{volt_number}') and
-    ('All' = '{asset}' or a.asset = '{asset}') and
-    ('All' = '{voltage}' or a.voltage = '{voltage}')
+    a.strategy = ({0}) and
+    cast(a.volt_number as string) = ({1}) and
+    a.asset = ({2}) and
+    a.voltage = ({3})
