@@ -25,21 +25,38 @@ def create_net_funds_flow_chart(friktion_gcloud_project, product_name):
             'epoch:O',
             axis=alt.Axis(
                 labelAngle=0, 
-                title='Epoch'
+                title='',
+                labelFontSize=12,
+                labelPadding=10
                 )
         ),
         y = alt.Y(
             'net_deposit_amt',
             axis=alt.Axis(
                 title='Gross Funds Flow',
-                format=',.0f'
+                format=',.0f',
+                labelFontSize=12,
+                labelPadding=10,
+                titleFontSize=16,
+                titlePadding=20,
+                grid=True
                 )
         ),
-        color = alt.value('green')
+        color = alt.value('black'),
+        tooltip=[
+            alt.Tooltip(
+            'epoch:O',
+            title='Epoch'
+            ),
+            alt.Tooltip(
+            'net_deposit_amt',
+            title='Net Deposit Amount',
+            format=',.0f'
+            )
+        ]
     ).properties(
-        height=200,
-        width=1000,
-        title=product_name
+        height=150,
+        width=1180
     )
 
     withdrawals = alt.Chart(df).mark_bar().encode(
@@ -47,21 +64,37 @@ def create_net_funds_flow_chart(friktion_gcloud_project, product_name):
             'epoch:O',
             axis=alt.Axis(
                 labelAngle=0, 
-                title='Epoch'
+                title='',
+                labelFontSize=12,
+                labelPadding=10
                 )
         ),
         y = alt.Y(
             'net_withdrawal_amt_neg',
             axis=alt.Axis(
                 title='Gross Funds Flow',
-                format=',.0f'
+                format=',.0f',
+                labelFontSize=12,
+                labelPadding=10,
+                titleFontSize=16,
+                titlePadding=20,
+                grid=True
                 )
         ),
-        color = alt.value('red')
+        tooltip=[
+            alt.Tooltip(
+            'epoch:O',
+            title='Epoch'
+            ),
+            alt.Tooltip(
+            'net_withdrawal_amt',
+            title='Net Withdrawal Amount',
+            format=',.0f'
+            )
+        ]
     ).properties(
-        height=200,
-        width=1000,
-        title=product_name
+        height=150,
+        width=1180
     )
 
     net = alt.Chart(df).mark_bar().encode(
@@ -69,23 +102,58 @@ def create_net_funds_flow_chart(friktion_gcloud_project, product_name):
             'epoch:O',
             axis=alt.Axis(
                 labelAngle=0, 
-                title='Epoch'
+                title='Epoch',
+                labelFontSize=12,
+                labelPadding=10,
+                titleFontSize=16,
+                titlePadding=20
                 )
         ),
         y = alt.Y(
             'net_funds_flow',
             axis=alt.Axis(
                 title='Net Funds Flow',
-                format=',.0f'
+                format=',.0f',
+                labelFontSize=12,
+                labelPadding=10,
+                titleFontSize=16,
+                titlePadding=20,
+                grid=True
                 )
         ),
-        color = alt.value('black')
+        color = alt.condition(
+            alt.datum.net_funds_flow >= 0,
+            alt.value('green'),
+            alt.value('red')
+        ),
+        tooltip=[
+            alt.Tooltip(
+            'epoch:O',
+            title='Epoch'
+            ),
+            alt.Tooltip(
+            'net_deposit_amt',
+            title='Net Deposit Amount',
+            format=',.0f'
+            ),
+            alt.Tooltip(
+            'net_withdrawal_amt',
+            title='Net Withdrawal Amount',
+            format=',.0f'
+            ),
+            alt.Tooltip(
+            'net_funds_flow',
+            title='Net Funds Flow',
+            format=',.0f'
+            )
+        ]
     ).properties(
-        height=200,
-        width=1000
+        height=150,
+        width=1180
     )
 
     # Combine charts together into a single view
     final_chart = (deposits + withdrawals) & net
+    
 
-    return final_chart
+    return final_chart.configure_concat(spacing=50).configure_view(strokeOpacity=0).configure_axisY(domainOpacity=0)
