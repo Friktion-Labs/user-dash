@@ -1,6 +1,7 @@
 aiodns==3.0.0
 aiohttp==3.8.1
 aiosignal==1.2.0
+altair
 ansi2html==1.6.0
 anyio==3.4.0
 apischema==0.16.6
