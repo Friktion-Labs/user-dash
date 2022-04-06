@@ -1,1 +1,1 @@
-import analytics.charts
+import charts
