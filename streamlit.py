@@ -26,23 +26,23 @@ with st.container():
     with col1:
         strategy = st.multiselect(
             'Strategy:', 
-            list(pd.read_gbq(query=open_file('friktionless/queries/distinct_strategies.sql'), project_id='friktion-dev')['strategy']),
-            list(pd.read_gbq(query=open_file('friktionless/queries/distinct_strategies.sql'), project_id='friktion-dev')['strategy']))
+            list(pd.read_parquet('gs://friktion-strategy/strategy.parquet')['strategy']),
+            list(pd.read_parquet('gs://friktion-strategy/strategy.parquet')['strategy']))
     with col2:
         volt_number = st.multiselect(
             'Volt Number:', 
-            list(pd.read_gbq(query=open_file('friktionless/queries/distinct_volt_numbers.sql'), project_id='friktion-dev')['volt_number']),
-            list(pd.read_gbq(query=open_file('friktionless/queries/distinct_volt_numbers.sql'), project_id='friktion-dev')['volt_number']))
+            list(pd.read_parquet('gs://friktion-volt-number/volt-number.parquet')['volt_number']),
+            list(pd.read_parquet('gs://friktion-volt-number/volt-number.parquet')['volt_number']))
     with col3:
         voltage = st.multiselect(
             'Voltage:', 
-            list(pd.read_gbq(query=open_file('friktionless/queries/distinct_voltages.sql'), project_id='friktion-dev')['voltage']),
-            list(pd.read_gbq(query=open_file('friktionless/queries/distinct_voltages.sql'), project_id='friktion-dev')['voltage']))
+            list(pd.read_parquet('gs://friktion-voltage/voltage.parquet')['voltage']),
+            list(pd.read_parquet('gs://friktion-voltage/voltage.parquet')['voltage']))
 
     asset = st.multiselect(
         'Asset:', 
-        list(pd.read_gbq(query=open_file('friktionless/queries/distinct_assets.sql'), project_id='friktion-dev')['asset']),
-        list(pd.read_gbq(query=open_file('friktionless/queries/distinct_assets.sql'), project_id='friktion-dev')['asset']))
+        list(pd.read_parquet('gs://friktion-assets/assets.parquet')['asset']),
+        list(pd.read_parquet('gs://friktion-assets/assets.parquet')['asset']))
 
     #st.markdown('#')
     st.altair_chart(
@@ -53,7 +53,10 @@ with st.container():
 # Net Funds Flow Container
 with st.container():
     st.header('Net Funds Flow')
-    product_name = st.selectbox('Product Name:', list(pd.read_gbq(query=open_file('friktionless/queries/distinct_product_names.sql'), project_id='friktion-dev')['product_name']))
+    product_name = st.selectbox(
+        'Product Name:', 
+        list(pd.read_parquet('gs://friktion-product-catalog/product-catalog.parquet')['product_name'])
+        )
     
     st.markdown('#')
     st.altair_chart(
