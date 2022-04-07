@@ -5,7 +5,7 @@ select
 from `friktion-dev.transactions.fact_deposits` fd
     left join `friktion-dev.analytics.product_catalog` pc on pc.product_name = fd.product_name
 where
-    pc.volt_number = '{}' and
-    asset in ({})
+    pc.volt_number = '{0}' and
+    asset in ({1})
 group by 1,2
 order by 2,1
