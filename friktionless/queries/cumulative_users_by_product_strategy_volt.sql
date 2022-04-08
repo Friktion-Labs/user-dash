@@ -9,7 +9,7 @@ select
     case when pc.is_high_voltage then 'High Voltage' else 'Low Voltage' end as voltage,
     fd.user_address,
     min(fd.deposit_initiated_ts) as first_deposit_ts
-from `friktion-dev.transactions.fact_deposits` fd
+from `transactions.fact_deposits` fd
     left join analytics.product_catalog pc on pc.product_name = fd.product_name
 group by 1,2,3,4,5,6,7
 ),
@@ -24,7 +24,7 @@ select
     e.epoch as first_epoch,
     count(b.user_address) as epoch_user_count
 from base b
-    left join analytics.epoch e on e.globalId = b.globalId and b.first_deposit_ts between timestamp_seconds(e.start) and timestamp_seconds(e.end)
+    left join analytics.epoch_catalog e on e.globalId = b.globalId and b.first_deposit_ts between timestamp_seconds(e.start) and timestamp_seconds(e.end)
 group by 1,2,3,4,5,6
 )
 
