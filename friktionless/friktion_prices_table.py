@@ -17,13 +17,8 @@ def create_friktion_prices_table(friktion_gcloud_project):
     client = bigquery.Client()
 
 
-    # Read in JSON mapper for assets to their respective GitHub file locations
-    file = open('asset_prices.json')
-    asset_prices_mapper = json.load(file)
-
-
-    # Create DataFrame from asset prices mapper
-    df = pd.DataFrame(asset_prices_mapper)
+    # Create DataFrame from asset prices mapper json
+    df = pd.read_json('https://raw.githubusercontent.com/msquaredsa-ds-dev/user-dash/master/asset_prices.json')
 
 
     # Delete existing prices table
