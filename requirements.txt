@@ -56,6 +56,7 @@ git-history==0.6.1
 gitdb==4.0.9
 GitPython==3.1.26
 google-cloud-bigquery
+google-cloud-storage
 gunicorn==20.1.0
 h11==0.12.0
 heroku3==5.1.4
