@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 
 def create_friktion_prices_table(friktion_gcloud_project):
     '''
-    Create a user table for friktion users in a the supplied google cloud project.
+    Create a price table in order to look at the value of tokens in USD terms in the supplied google cloud project.
 
     Example
     ----------
