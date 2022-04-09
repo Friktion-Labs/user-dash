@@ -27,6 +27,7 @@ def create_friktion_prices_table(friktion_gcloud_project):
 
 
     # Delete existing prices table
+    print('Creating BigQuery Client...')
     client.query('drop table if exists analytics.prices', project=friktion_gcloud_project)
 
 
@@ -42,4 +43,5 @@ def create_friktion_prices_table(friktion_gcloud_project):
         
         final_df = prices[['asset','timestamp','price_usd']]
         
+        print(datetime.now(),'Writing {} price data to BigQuery'.format(value[0]))
         final_df.to_gbq('analytics.prices',project_id='lyrical-amulet-337502',if_exists='append')
