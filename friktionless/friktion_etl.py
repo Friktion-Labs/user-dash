@@ -494,7 +494,7 @@ class transactionEtl:
         print(datetime.now(), "Now writing to Google BigQuery")
 
         # TODO : Go back and make the project-id a parameterized input
-        df.to_gbq('solana.{}'.format(dw_schema[instructionType.lower()]), project_id='friktion-dev', if_exists='append')
+        df.to_gbq('solana.{}'.format(dw_schema[instructionType.lower()]), project_id='lyrical-amulet-337502', if_exists='append')
 
 
 def backfill_source_tables(userAction, date_end=datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")):
