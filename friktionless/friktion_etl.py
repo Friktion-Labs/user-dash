@@ -57,7 +57,7 @@ class transactionEtl:
             query MyQuery {
               solana {
                 instructions(
-                  time: {between: ["%s", "%s"]}
+                  time: {after: "%s", before: "%s"}
                   success: {is: true}
                   programId: {is: "VoLT1mJz1sbnxwq5Fv2SXjdVDgPXrb9tJyC8WpMDkSp"}
                   options: {limit: 8700}
