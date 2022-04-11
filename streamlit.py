@@ -56,14 +56,14 @@ with st.container():
     volt_number_select = st.selectbox(
         'Volt Number:',
         list(pd.read_parquet('gs://friktion-volt-numbers-prod/volt-numbers.parquet')['volt_number']),
-        1
+        0
     )
     start_epoch, end_epoch = st.select_slider(
         'Epoch Range:',
         options=list(pd.read_parquet('gs://friktion-epochs_prod/epochs.parquet')['epochs']),
         value=(
-            list(pd.read_parquet('gs://friktion-epochs_prod/epochs.parquet')['epochs'][0]),
-            list(pd.read_parquet('gs://friktion-epochs_prod/epochs.parquet')['epochs'][-1])
+            list(pd.read_parquet('gs://friktion-epochs-prod/epochs.parquet')['epochs'][0]),
+            list(pd.read_parquet('gs://friktion-epochs-prod/epochs.parquet')['epochs'][-1])
             )
         )
 
