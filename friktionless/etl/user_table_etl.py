@@ -1,6 +1,14 @@
+import logging
+
+# create logger
+logger = logging.getLogger('user_etl_logger')
+logger.setLevel(logging.DEBUG)
+
+logger.info('importing packages')
 import pandas as pd
 import datetime
 
+logger.info('creating master user table in pandas')
 master_user_table = pd.DataFrame(columns=['user_address', 'as_of_date', 'total_value_locked_USD', 'total_deposited_USD', 'total_withdrawn_USD', \
                                            'tvl_delta_30_days', 'tvl_delta_60_days', 'tvl_delta_90_days', \
                                            'tvl_delta_1_epoch', 'tvl_delta_2_epoch', \
@@ -13,22 +21,26 @@ master_user_table = pd.DataFrame(columns=['user_address', 'as_of_date', 'total_v
                                            'has_churned', 'churn_date', 'churn_epoch'])
 
     
-
+logger.info('querying for the dates dataframe')
 dates = pd.read_gbq(
     query='select distinct date(deposit_initiated_ts) as date from transactions.fact_deposits',
     project_id='friktion-dev'
     )
 
+logger.info('querying for the users dataframe')
 users = pd.read_gbq(
     query='select distinct(user_address) as user_address from transactions.fact_deposits')
 
+logger.info('querying for user first deposit dates dataframe')
 user_first_deposits_dates = pd.read_gbq(
     query='select user_address, min(date(deposit_initiated_ts)) as first_deposit_dt from transactions.fact_deposits group by user_address')
 
+logger.info('start looping through all users')
 for index in range(user_first_deposits_dates.shape[0]):
     current_user_address = user_first_deposits_dates.iloc[index,:]['user_address']
     user_first_deposit_date = user_first_deposits_dates.iloc[index,:]['first_deposit_dt']
-    
+    logger.info(f'processing user {current_user_address} who first deposited on {user_first_deposit_date.isoformat()}')
+
     user_deposit_table = pd.DataFrame(columns=['user_address', 'as_of_date', 'total_value_locked_USD', 'total_deposited_USD', 'total_withdrawn_USD', \
                                            'tvl_delta_30_days', 'tvl_delta_60_days', 'tvl_delta_90_days', \
                                            'tvl_delta_1_epoch', 'tvl_delta_2_epoch', \
