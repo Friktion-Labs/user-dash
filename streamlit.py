@@ -2,12 +2,6 @@ import friktionless as fless
 import streamlit as st
 import pandas as pd
 
-### UTILITY FUNCTION - Needs to be put into friktionless ###
-def open_file(path):
-    with open (path) as query:
-        query_string = query.read()
-    
-    return query_string
 
 st.set_page_config(
     page_title='Friktion Analytics Hub',
@@ -44,11 +38,12 @@ with st.container():
         list(pd.read_parquet('gs://friktion-assets-prod/assets.parquet')['asset']),
         list(pd.read_parquet('gs://friktion-assets-prod/assets.parquet')['asset']))
 
-    #st.markdown('#')
+    st.markdown('#')
     st.altair_chart(
         fless.analytics.charts.create_cumulative_users_chart('lyrical-amulet-337502',strategy,volt_number,asset,voltage),
         use_container_width=True
     )
+    st.markdown('#')
 
 # Average Deposit Amount by Underlying Asset Container
 with st.container():
@@ -62,16 +57,17 @@ with st.container():
         'Epoch Range:',
         options=list(pd.read_parquet('gs://friktion-epochs-prod/epochs.parquet')['epochs']),
         value=(
-            list(pd.read_parquet('gs://friktion-epochs-prod/epochs.parquet')['epochs'][0]),
-            list(pd.read_parquet('gs://friktion-epochs-prod/epochs.parquet')['epochs'][-1])
+            list(pd.read_parquet('gs://friktion-epochs-prod/epochs.parquet')['epochs'])[0],
+            list(pd.read_parquet('gs://friktion-epochs-prod/epochs.parquet')['epochs'])[-1]
             )
         )
 
     st.markdown('#')
     st.altair_chart(
-        fless.analytics.charts.create_avg_deposit_by_underlying_asset_chart('lyrical-amulet-337502', volt_number, start_epoch, end_epoch),
+        fless.analytics.charts.create_avg_deposit_by_underlying_asset_chart('lyrical-amulet-337502', volt_number_select, start_epoch, end_epoch),
         use_container_width=True
     )
+    st.markdown('#')
 
 # Net Funds Flow Container
 with st.container():

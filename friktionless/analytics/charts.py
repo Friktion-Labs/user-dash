@@ -43,7 +43,7 @@ def create_net_funds_flow_chart(friktion_gcloud_project, product_name):
                 ticks=False
                 )
         ),
-        color = alt.value('black'),
+        color = alt.value('#5856d6'),
         tooltip=[
             alt.Tooltip(
             'epoch:O',
@@ -83,6 +83,7 @@ def create_net_funds_flow_chart(friktion_gcloud_project, product_name):
                 ticks=False
                 )
         ),
+        color=alt.value('#34aadc'),
         tooltip=[
             alt.Tooltip(
             'epoch:O',
@@ -339,23 +340,26 @@ def create_avg_deposit_by_underlying_asset_chart(friktion_gcloud_project, volt_n
                 labelFontSize=12,
                 labelPadding=10,
                 titleFontSize=16,
-                titlePadding=20
+                titlePadding=20,
+                ticks=False
             )
         ),
         tooltip = [
         alt.Tooltip(
             'underlying_asset',
             title='Underlying Asset'
-        ),
+            ),
         alt.Tooltip(
             'avg_deposit_initiated_amt_usd_spot',
             title='Avg. Deposit Amount (Spot FX)',
             format='$,.0f'
-        )
-    ]
+            )
+        ],
+        color=alt.value('#5856d6')
+
     ).properties(
         height=400,
         width=1180
     )
 
-    return avg_deposit_by_asset
+    return avg_deposit_by_asset.configure_view(strokeOpacity=0).configure_axisY(domainOpacity=0)
