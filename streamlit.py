@@ -60,7 +60,7 @@ with st.container():
     )
     start_epoch, end_epoch = st.select_slider(
         'Epoch Range:',
-        options=list(pd.read_parquet('gs://friktion-epochs_prod/epochs.parquet')['epochs']),
+        options=list(pd.read_parquet('gs://friktion-epochs-prod/epochs.parquet')['epochs']),
         value=(
             list(pd.read_parquet('gs://friktion-epochs-prod/epochs.parquet')['epochs'][0]),
             list(pd.read_parquet('gs://friktion-epochs-prod/epochs.parquet')['epochs'][-1])
