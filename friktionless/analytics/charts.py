@@ -318,7 +318,7 @@ def create_avg_deposit_by_underlying_asset_chart(friktion_gcloud_project, volt_n
 
 
     # Create Altair charts
-    avg_deposit_by_asset = alt.Chart(df[df['volt_number']==2]).mark_bar().encode(
+    avg_deposit_by_asset = alt.Chart(df).mark_bar().encode(
         x = alt.X(
             'underlying_asset',
             axis=alt.Axis(
