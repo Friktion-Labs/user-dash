@@ -50,6 +50,29 @@ with st.container():
         use_container_width=True
     )
 
+# Average Deposit Amount by Underlying Asset Container
+with st.container():
+    st.header('Average Deposit Amount')
+    volt_number_select = st.selectbox(
+        'Volt Number:',
+        list(pd.read_parquet('gs://friktion-volt-numbers-prod/volt-numbers.parquet')['volt_number']),
+        1
+    )
+    start_epoch, end_epoch = st.select_slider(
+        'Epoch Range:',
+        options=list(pd.read_parquet('gs://friktion-epochs_prod/epochs.parquet')['epochs']),
+        value=(
+            list(pd.read_parquet('gs://friktion-epochs_prod/epochs.parquet')['epochs'][0]),
+            list(pd.read_parquet('gs://friktion-epochs_prod/epochs.parquet')['epochs'][-1])
+            )
+        )
+
+    st.markdown('#')
+    st.altair_chart(
+        fless.analytics.charts.create_avg_deposit_by_underlying_asset_chart('lyrical-amulet-337502', volt_number, start_epoch, end_epoch),
+        use_container_width=True
+    )
+
 # Net Funds Flow Container
 with st.container():
     st.header('Net Funds Flow')
