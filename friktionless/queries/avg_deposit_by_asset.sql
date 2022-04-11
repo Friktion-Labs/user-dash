@@ -30,7 +30,7 @@ from `transactions.fact_deposits` fd
     ) p2 on p2.asset = fd.deposited_asset
     left join analytics.product_catalog pc on pc.product_name = fd.product_name
 where
-    cast(fd.custody_epoch as string) between '{0}' and '{1}' and
+    fd.custody_epoch between cast('{0}' as integer) and cast('{1}' as integer) and
     cast(fd.volt_number as string) = '{2}'
 group by 1,2,3,4,5,6
 order by 2
