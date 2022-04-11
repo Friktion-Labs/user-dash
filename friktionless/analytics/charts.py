@@ -357,3 +357,5 @@ def create_avg_deposit_by_underlying_asset_chart(friktion_gcloud_project, volt_n
         height=400,
         width=1180
     )
+
+    return avg_deposit_by_asset
