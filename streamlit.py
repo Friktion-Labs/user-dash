@@ -45,9 +45,9 @@ with st.container():
     )
     st.markdown('#')
 
-# Average Deposit Amount by Underlying Asset Container
+# Average Deposit Amount and Withdrawal Amount by Underlying Asset Container
 with st.container():
-    st.header('Average Deposit Amount')
+    st.header('Average Deposit and Withdrawal Amounts')
     volt_number_select = st.selectbox(
         'Volt Number:',
         list(pd.read_parquet('gs://friktion-volt-numbers-prod/volt-numbers.parquet')['volt_number']),
@@ -63,10 +63,19 @@ with st.container():
         )
 
     st.markdown('#')
-    st.altair_chart(
-        fless.analytics.charts.create_avg_deposit_by_underlying_asset_chart('lyrical-amulet-337502', volt_number_select, start_epoch, end_epoch),
-        use_container_width=True
-    )
+    col4, col5 = st.columns(2)
+
+    with col4:
+        st.altair_chart(
+            fless.analytics.charts.create_avg_deposit_by_underlying_asset_chart('lyrical-amulet-337502', volt_number_select, start_epoch, end_epoch),
+            use_container_width=True
+        )
+
+    with col5:
+        st.altair_chart(
+            fless.analytics.charts.create_avg_withdrawal_by_underlying_asset_chart('lyrical-amulet-337502', volt_number_select, start_epoch, end_epoch),
+            use_container_width=True
+        )
     st.markdown('#')
 
 # Net Funds Flow Container

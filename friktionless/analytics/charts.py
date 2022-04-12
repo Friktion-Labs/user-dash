@@ -359,7 +359,80 @@ def create_avg_deposit_by_underlying_asset_chart(friktion_gcloud_project, volt_n
 
     ).properties(
         height=400,
-        width=1180
+        width=525
     )
 
     return avg_deposit_by_asset.configure_view(strokeOpacity=0).configure_axisY(domainOpacity=0)
+
+
+def create_avg_withdrawal_by_underlying_asset_chart(friktion_gcloud_project, volt_number, start_epoch, end_epoch):
+    '''
+    Create a bar chart which shows the average withdrawal amount in USD (at the current spot price), for a supplied google cloud project.
+
+    Example
+    ----------
+    import friktionless as fless
+    fless.analytics.create_avg_withdrawal_by_underlying_asset_chart('some_project_name', 1, 4, 10)
+
+    '''
+
+    # Open avg_deposit_by_asset SQL query
+    with open ('friktionless/queries/avg_withdrawal_by_asset.sql') as query:
+        query_string = query.read()
+
+    
+    # Read in data from Google BigQuery
+    df = pd.read_gbq(
+        query=query_string.format(
+            start_epoch,
+            end_epoch,
+            volt_number
+            ), project_id=friktion_gcloud_project
+    )
+
+
+    # Create Altair charts
+    avg_withdrawal_by_asset = alt.Chart(df).mark_bar().encode(
+        x = alt.X(
+            'underlying_asset',
+            axis=alt.Axis(
+                title='Underlying Asset',
+                labelAngle=-45,
+                labelFontSize=12,
+                labelPadding=10,
+                titleFontSize=16,
+                titlePadding=20
+            ),
+            sort='-y'
+        ),
+        y = alt.Y(
+            'avg_withdrawal_initiated_amt_usd_spot',
+            axis=alt.Axis(
+                title='Avg. Withdrawal Amt (Spot FX)',
+                format='$,.0f',
+                labelFontSize=12,
+                labelPadding=10,
+                titleFontSize=16,
+                titlePadding=20,
+                ticks=False
+            )
+        ),
+        tooltip = [
+        alt.Tooltip(
+            'underlying_asset',
+            title='Underlying Asset'
+            ),
+        alt.Tooltip(
+            'avg_withdrawal_initiated_amt_usd_spot',
+            title='Avg. Withdrawal Amount (Spot FX)',
+            format='$,.0f'
+            )
+        ],
+        color=alt.value('#5856d6')
+
+    ).properties(
+        height=400,
+        width=525
+    )
+
+    return avg_withdrawal_by_asset.configure_view(strokeOpacity=0).configure_axisY(domainOpacity=0)
