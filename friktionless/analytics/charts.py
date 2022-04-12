@@ -1,7 +1,9 @@
 import pandas as pd
 import altair as alt
+import streamlit as st
 
 
+@st.cache()
 def create_net_funds_flow_chart(friktion_gcloud_project, product_name):
     '''
     Create a bar chart which shows the deposits, withdrawls, and net funds flow by epoch for a supplied google cloud project and product name.
@@ -163,6 +165,7 @@ def create_net_funds_flow_chart(friktion_gcloud_project, product_name):
     return final_chart.configure_concat(spacing=50).configure_view(strokeOpacity=0).configure_axisY(domainOpacity=0)
 
 
+@st.cache()
 def create_cumulative_users_chart(friktion_gcloud_project, strategy, volt_number, asset, voltage):
     '''
     Create a line chart which shows the cumulative number of unique users by epoch, segmented by product name, for a supplied google cloud project, strategy, volt number, and asset.
@@ -292,6 +295,7 @@ def create_cumulative_users_chart(friktion_gcloud_project, strategy, volt_number
     return final_chart.configure_concat(spacing=50)
 
 
+@st.cache()
 def create_avg_deposit_by_underlying_asset_chart(friktion_gcloud_project, volt_number, start_epoch, end_epoch):
     '''
     Create a bar chart which shows the average deposit amount in USD (at the current spot price), for a supplied google cloud project.
@@ -365,6 +369,7 @@ def create_avg_deposit_by_underlying_asset_chart(friktion_gcloud_project, volt_n
     return avg_deposit_by_asset.configure_view(strokeOpacity=0).configure_axisY(domainOpacity=0)
 
 
+@st.cache()
 def create_avg_withdrawal_by_underlying_asset_chart(friktion_gcloud_project, volt_number, start_epoch, end_epoch):
     '''
     Create a bar chart which shows the average withdrawal amount in USD (at the current spot price), for a supplied google cloud project.
