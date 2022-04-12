@@ -428,7 +428,7 @@ def create_avg_withdrawal_by_underlying_asset_chart(friktion_gcloud_project, vol
             format='$,.0f'
             )
         ],
-        color=alt.value('#5856d6')
+        color=alt.value('#34aadc')
 
     ).properties(
         height=400,
