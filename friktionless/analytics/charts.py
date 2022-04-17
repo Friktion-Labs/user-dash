@@ -1,6 +1,5 @@
 import pandas as pd
 import altair as alt
-import streamlit as st
 
 
 def create_net_funds_flow_chart(friktion_gcloud_project, product_name):
