@@ -6,7 +6,6 @@ Python script to scrape Friktion User Data from Bitquery GraphQL API.
 from ast import parse
 import json
 import requests
-import requests
 import traceback
 import time
 
@@ -58,7 +57,7 @@ class transactionEtl:
             query MyQuery {
               solana {
                 instructions(
-                  time: {between: ["%s", "%s"]}
+                  time: {after: "%s", before: "%s"}
                   success: {is: true}
                   programId: {is: "VoLT1mJz1sbnxwq5Fv2SXjdVDgPXrb9tJyC8WpMDkSp"}
                   options: {limit: 8700}
@@ -495,7 +494,7 @@ class transactionEtl:
         print(datetime.now(), "Now writing to Google BigQuery")
 
         # TODO : Go back and make the project-id a parameterized input
-        df.to_gbq('solana.{}'.format(dw_schema[instructionType.lower()]), project_id='friktion-dev', if_exists='append')
+        df.to_gbq('solana.{}'.format(dw_schema[instructionType.lower()]), project_id='lyrical-amulet-337502', if_exists='append')
 
 
 def backfill_source_tables(userAction, date_end=datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")):

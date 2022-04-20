@@ -56,6 +56,7 @@ git-history==0.6.1
 gitdb==4.0.9
 GitPython==3.1.26
 google-cloud-bigquery
+google-cloud-storage
 gunicorn==20.1.0
 h11==0.12.0
 heroku3==5.1.4
@@ -155,6 +156,7 @@ soupsieve==2.3.1
 sqlite-fts4==1.0.1
 sqlite-utils==3.22
 statsmodels==0.13.1
+streamlit
 tabulate==0.8.9
 tenacity==8.0.1
 terminado==0.12.1

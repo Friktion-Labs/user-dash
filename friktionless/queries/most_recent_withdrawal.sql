@@ -2,4 +2,4 @@
 
 select
     max(w.timestamp) as most_recent_txn_ts
-from `friktion-dev.solana.withdrawals` w
+from `solana.withdrawals` w

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 '''
 The Analytics API
 
@@ -7,3 +8,6 @@ This API makes analysis friktionless. It provides tools that facilitate
 '''
 
 from . import charts
+=======
+from . import charts, data
+>>>>>>> master
