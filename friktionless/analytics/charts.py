@@ -13,7 +13,7 @@ def create_net_funds_flow_chart(friktion_gcloud_project, product_name):
 
     '''
     # Open net_funds_flow SQL query
-    with open ('friktionless/queries/net_funds_flow.sql') as query:
+    with open ('friktionless/analytics/queries/net_funds_flow.sql') as query:
         query_string = query.read()
 
     # Read in data from Google BigQuery
@@ -174,7 +174,7 @@ def create_cumulative_users_chart(friktion_gcloud_project, strategy, volt_number
 
     '''
     # Open net_funds_flow SQL query
-    with open ('friktionless/queries/cumulative_users_by_product_strategy_volt.sql') as query:
+    with open ('friktionless/analytics/queries/cumulative_users_by_product_strategy_volt.sql') as query:
         query_string = query.read()
 
     # Read in data from Google BigQuery
@@ -304,7 +304,7 @@ def create_avg_deposit_by_underlying_asset_chart(friktion_gcloud_project, volt_n
     '''
 
     # Open avg_deposit_by_asset SQL query
-    with open ('friktionless/queries/avg_deposit_by_asset.sql') as query:
+    with open ('friktionless/analytics/queries/avg_deposit_by_asset.sql') as query:
         query_string = query.read()
 
     
@@ -377,7 +377,7 @@ def create_avg_withdrawal_by_underlying_asset_chart(friktion_gcloud_project, vol
     '''
 
     # Open avg_deposit_by_asset SQL query
-    with open ('friktionless/queries/avg_withdrawal_by_asset.sql') as query:
+    with open ('friktionless/analytics/queries/avg_withdrawal_by_asset.sql') as query:
         query_string = query.read()
 
     
