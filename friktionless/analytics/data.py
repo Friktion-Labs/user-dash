@@ -81,7 +81,7 @@ def deposits(
     '''
 
     # Open fact_deposits_all SQL query
-    with open ('friktionless/queries/fact_deposits_all.sql') as query:
+    with open ('friktionless/analytics/queries/fact_deposits_all.sql') as query:
         query_string = query.read()
 
     # Read in data from Google BigQuery
@@ -184,7 +184,7 @@ def withdrawals(
     '''
 
     # Open fact_withdrawals_all SQL query
-    with open ('friktionless/queries/fact_withdrawals_all.sql') as query:
+    with open ('friktionless/analytics/queries/fact_withdrawals_all.sql') as query:
         query_string = query.read()
 
     # Read in data from Google BigQuery
@@ -287,7 +287,7 @@ def cancelled_deposits(
     '''
 
     # Open fact_deposits_cancel_pending_all SQL query
-    with open ('friktionless/queries/fact_deposits_cancel_pending_all.sql') as query:
+    with open ('friktionless/analytics/queries/fact_deposits_cancel_pending_all.sql') as query:
         query_string = query.read()
 
     # Read in data from Google BigQuery
@@ -390,7 +390,7 @@ def cancelled_withdrawals(
     '''
 
     # Open fact_withdrawals_cancel_pending_all SQL query
-    with open ('friktionless/queries/fact_withdrawals_cancel_pending_all.sql') as query:
+    with open ('friktionless/analytics/queries/fact_withdrawals_cancel_pending_all.sql') as query:
         query_string = query.read()
 
     # Read in data from Google BigQuery
