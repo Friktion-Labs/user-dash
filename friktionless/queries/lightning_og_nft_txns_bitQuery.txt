@@ -1,8 +1,9 @@
 query MyQuery {
   solana {
     transfers(
-      currency: {in: "%s"}
+      currency: {is: "%s"}
       success: {is: true}
+      time: {after: "%s", before: "%s"}
     ) {
       amount
       block {
