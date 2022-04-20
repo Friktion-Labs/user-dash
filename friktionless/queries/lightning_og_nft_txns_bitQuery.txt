@@ -3,7 +3,7 @@ query MyQuery {
     transfers(
       currency: {is: "%s"}
       success: {is: true}
-      time: {after: "%s", before: "%s"}
+      time: {after: "%s"}
     ) {
       amount
       block {
