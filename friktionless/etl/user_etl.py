@@ -1,29 +1,45 @@
 import pandas as pd
 from google.cloud import bigquery
+from datetime import date
 
 def write_user_first_deposit_table():
     # create the user first deposit table
 
     user_first_deposits_query = None
 
-    with open('user_first_deposit.sql', 'r') as f:
+    import os
+    fname = 'user_first_deposit.sql'
+    this_file = os.path.abspath(__file__)
+    this_dir = os.path.dirname(this_file)
+    wanted_file = os.path.join(this_dir, fname)
+    
+    print(f'opening {wanted_file}')
+    
+    with open(wanted_file, 'r') as f:
         user_first_deposits_query = f.read()
+    
+    print('loaded query to memory')
 
     user_first_deposits_df = pd.read_gbq(query=user_first_deposits_query)
 
+    print('loaded dataframe')
     # make sure the output meets our tests
-
+    print('testing output')
     # test 1: the number of rows should match the number of distinct user_address
     # ie. there should be one-to-one relationship between user_address and rows in this table
 
     assert user_first_deposits_df.user_address.nunique() == user_first_deposits_df.shape[0], \
         f'{user_first_deposits_df.user_address.nunique()} unique user_address does not equal {user_first_deposits_df.shape[0]} rows'
+    
+    # reformat the output so it's ready for BigQuery ingest
+    user_first_deposits_df.first_deposit_date = user_first_deposits_df.first_deposit_date.apply(date.isoformat)
 
     # write it to json
-
+    print('writing dataframe to gcs')
     user_first_deposits_df.to_json('gs://friktion-users-prod/user-first-deposits.json', orient='records', date_format='iso', lines=True)
 
     # load it bigquery
+    print('loading to bigquery')
     # Construct a BigQuery client object.
     client = bigquery.Client()
 
@@ -40,6 +56,7 @@ def write_user_first_deposit_table():
             bigquery.SchemaField("first_deposit_amount", "FLOAT64"),
         ],
         source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
+        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
     )
     uri = "gs://friktion-users-prod/user-first-deposits.json"
 
