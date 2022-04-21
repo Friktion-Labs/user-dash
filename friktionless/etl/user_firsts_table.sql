@@ -10,6 +10,6 @@ select
     , fw.first_withdrawal_epoch
     , fw.first_withdrawal_token as first_withdrawal_token
     , fw.first_withdrawal_amount
-from `friktion-dev.users.fact_user_first_deposit` fd
-left join `friktion-dev.users.fact_user_first_withdrawal` fw
+from users.fact_user_first_deposit fd
+left join users.fact_user_first_withdrawal fw
     on fw.user_address = fd.user_address
