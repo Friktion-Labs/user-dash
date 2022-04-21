@@ -169,17 +169,17 @@ def write_user_firsts_table():
     # test 1: the number of rows should match the number of distinct user_address
     # ie. there should be one-to-one relationship between user_address and rows in this table
 
-    assert user_firsts_query.user_address.nunique() == user_firsts_query.shape[0], \
-        f'{user_firsts_query.user_address.nunique()} unique user_address does not equal {user_firsts_query.shape[0]} rows'
+    assert user_firsts_df.user_address.nunique() == user_firsts_df.shape[0], \
+        f'{user_firsts_df.user_address.nunique()} unique user_address does not equal {user_firsts_df.shape[0]} rows'
     
     # reformat the output so it's ready for BigQuery ingest
     print('formatting dates')
-    user_firsts_query.first_deposit_date = user_firsts_query.first_deposit_date.apply(date.isoformat)
-    user_firsts_query.first_withdrawal_date = user_firsts_query.first_withdrawal_date.apply(date.isoformat)
+    user_firsts_df.first_deposit_date = user_firsts_df.first_deposit_date.apply(date.isoformat)
+    user_firsts_df.first_withdrawal_date = user_firsts_df.first_withdrawal_date.apply(date.isoformat)
 
     # write it to json
     print('writing dataframe to gcs')
-    user_firsts_query.to_json('gs://friktion-users-prod/tables/user-firsts.json', orient='records', date_format='iso', lines=True)
+    user_firsts_df.to_json('gs://friktion-users-prod/tables/user-firsts.json', orient='records', date_format='iso', lines=True)
     # load it bigquery
     print('loading to bigquery')
     # Construct a BigQuery client object.
