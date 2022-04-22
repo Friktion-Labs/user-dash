@@ -1,0 +1,35 @@
+query MyQuery {
+  solana {
+    transfers(
+      currency: {is: "%s"}
+      success: {is: true}
+      time: {after: "%s"}
+    ) {
+      amount
+      block {
+        timestamp {
+          iso8601
+          unixtime
+        }
+        height
+      }
+      currency {
+        tokenType
+        address
+      }
+      receiver {
+        address
+        type
+      }
+      sender {
+        address
+        type
+      }
+      transferType
+      transaction {
+        signature
+        signer
+      }
+    }
+  }
+}

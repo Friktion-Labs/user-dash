@@ -70,5 +70,6 @@ $ (friktion) johnreyes@pop-os:~/projects/user-dash$ python
 
 """
 
-import friktionless.analytics
 import friktionless.etl
+import friktionless.analytics
+import friktionless.friktion_prices_table
