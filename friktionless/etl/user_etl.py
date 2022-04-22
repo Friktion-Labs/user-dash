@@ -219,20 +219,19 @@ def write_user_firsts_table():
     print("Loaded {} rows.".format(destination_table.num_rows))
 
 def divide_and_conquer():
-    user_first_deposits_df = pd.read_json(f'gs://friktion-users-prod/tables/user_first_deposits.json', orient='records', lines=True, convert_dates=['first_deposit_date'])
+    user_first_deposits_df = pd.read_json("gs://friktion-users-prod/user-first-deposits.json", orient='records', lines=True, convert_dates=['first_deposit_date'])
 
     total_rows = user_first_deposits_df.shape[0]
 
     iters = user_first_deposits_df.shape[0] // 500
 
     for iter in range(iters):
-        for iter in range(user_first_deposits_df.shape[0] // 500):
-            start = (iter*500)
-            if start < 12000:
-                finish = start+500
-            else:
-                finish = None
-            
+        start = (iter*500)
+        if start < 12000:
+            finish = start+500
+        else:
+            finish = None
+
         user_first_deposits_df.iloc[start:finish,:].to_json(f'user_first_deposits_part_{iter}.json',\
                 orient='records', date_format='iso', lines=True, date_unit='s')
     

@@ -1,4 +1,7 @@
+#! /opt/conda/bin/python
+
 import pandas as pd
+from datetime import date
 from tqdm import tqdm
 
 def collect_and_write_user_table(user_address, first_deposit_date, max_date, min_date):
@@ -6,7 +9,13 @@ def collect_and_write_user_table(user_address, first_deposit_date, max_date, min
 
     _user_table_script_query = None
 
-    with open('user_table_sript.sql', 'r') as f:
+    import os
+    fname = 'user_table_sript.sql'
+    this_file = os.path.abspath(__file__)
+    this_dir = os.path.dirname(this_file)
+    wanted_file = os.path.join(this_dir, fname)
+    
+    with open(wanted_file, 'r') as f:
         _user_table_script_query = f.read()
         
     # Construct a BigQuery client object.
@@ -32,6 +41,9 @@ def collect_and_write_user_table(user_address, first_deposit_date, max_date, min
     # Fetch result rows for the final sub-job in the script.
     rows = list(rows_iterable)
     
+    min_date = min_date.date()
+    max_date = date.fromisoformat(max_date)
+        
     print_true = (len(rows) > abs((min_date - max_date).days)+1)
     
     if print_true:
@@ -62,7 +74,9 @@ def collect_and_write_user_table(user_address, first_deposit_date, max_date, min
 if __name__ == '__main__':
     import sys
 
-    split = sys.argv[0]
+    split = sys.argv[1]
+    
+    print(split)
 
     user_first_deposits_df = pd.read_json(f'user_first_deposits_part_{split}.json', orient='records', lines=True, convert_dates=['first_deposit_date'])
 
