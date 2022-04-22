@@ -21,6 +21,7 @@ Here are just a few of the things that friktionless does well:
   - a Python and CLI api to enable data scientists and data engineers off the 
     same, singular codebase.
 
+#TODO: Replace example with better ones from analytics api and etl api actual use cases.
 
 Example
 ------------
@@ -69,6 +70,6 @@ $ (friktion) johnreyes@pop-os:~/projects/user-dash$ python
 
 """
 
-import friktionless.friktion_etl
+import friktionless.etl
 import friktionless.analytics
 import friktionless.friktion_prices_table

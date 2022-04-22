@@ -14,7 +14,7 @@ from datetime import datetime
 from os.path import exists
 
 
-class transactionEtl:
+class TransactionEtl:
     """
     Python ETL script for Friktion user portfolio data. Currently supported Instruction Names:
         - Deposit
@@ -503,7 +503,7 @@ def backfill_source_tables(userAction, date_end=datetime.now().strftime("%Y-%m-%
     date_start = "2021-12-16T00:00:00Z"
 
     # Instantiate transaction ETL class
-    etl = transactionEtl(date_start, date_end)
+    etl = TransactionEtl(date_start, date_end)
 
     if userAction == 'deposit':
         etl.parse_deposits()
@@ -535,7 +535,7 @@ def append_most_recent_transactions(friktion_gcloud_project, userAction):
     date_end=datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # Instantiate transaction ETL class
-    etl = transactionEtl(date_start, date_end)
+    etl = TransactionEtl(date_start, date_end)
 
     if userAction == 'deposit':
         etl.parse_deposits()
