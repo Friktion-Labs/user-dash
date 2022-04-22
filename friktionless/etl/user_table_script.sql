@@ -1,9 +1,21 @@
 # user_table_sql_script
 
+/*
+    The user table sql script creates an individual user history table from the transactional history.
+
+    It depends on input parameters, the transactions.fact_deposits and transactions.withdrawals tables
+
+    TODO: move this a parallel processing format - See Apache Beam executed on Google Dataflow.
+*/
+
 declare max_date date;
 declare as_of_date_range array<date>;
 declare first_deposit_user_address string;
 declare first_deposit_dt date;
+
+/****************************
+    Input Parameters
+****************************/
 
 set max_date = @max_date;
 set first_deposit_user_address = @user_address;
@@ -43,9 +55,9 @@ create temp table user_daily_withdrawals (user_address string, as_of_date date, 
         cd.first_withdrawal_amount,
         lw.last_withdrawal_date, 
         lw.last_withdrawal_epoch, 
-        lw.last_withdrawal_amt, 
+        lw.last_withdrawal_amt as last_withdrawal_amount, 
         lw.last_withdrawal_token,
-        ld.last_deposit_amt, 
+        ld.last_deposit_amt as last_deposit_amount, 
         ld.last_deposit_epoch, 
         ld.last_deposit_token, 
         ld.last_deposit_date,

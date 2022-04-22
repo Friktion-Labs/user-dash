@@ -1,4 +1,12 @@
-# user firsts tables
+# user firsts table
+
+/*
+    The user firsts table sql creates a single record of all first activites for a user.
+
+    It depends on the users.fact_user_first_deposit and users.fact_user_first_withdrawal tables
+    
+    TODO: move this a streaming processing format - See Apache Beam executed on Google Dataflow.
+*/
 
 select
     fd.user_address

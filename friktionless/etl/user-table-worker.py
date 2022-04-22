@@ -1,16 +1,41 @@
 #! /opt/conda/bin/python
 
+'''
+USER TABLE WORKER
+
+The user table worker is script designed to be executed at the command line to enable
+fan-out processing of transaction data into individual user table and then write those
+to file output in Google Cloud Storage.
+
+You need to run the divide_and_conquer function in the user_etl.py file and etl api before
+you use the workers. They are consuming the numbered output files of divide_and_conquer.
+
+Example:
+$ python
+    > import friktionless
+    > friktionless.etl.divide_and_conquer()
+$ ./user-dash/friktionless/etl/user-table-worker.py 0 & ./user-dash/friktionless/etl/user-table-worker.py 1 ...
+
+'''
+
 import pandas as pd
 from datetime import date
 from tqdm import tqdm
 
 def collect_and_write_user_table(user_address, first_deposit_date, max_date, min_date):
+    '''
+    execute the user_table_script and write the outcome to Google Cloud Storage in a JSON
+    '''
+    
+    
+    # TODO: So much of this table creation code is boiler plate. See copy-paste source 
+    # in user_table_etl.py. Need to refactor. WET Code
     from google.cloud import bigquery
 
     _user_table_script_query = None
 
     import os
-    fname = 'user_table_sript.sql'
+    fname = 'user_table_script.sql'
     this_file = os.path.abspath(__file__)
     this_dir = os.path.dirname(this_file)
     wanted_file = os.path.join(this_dir, fname)
@@ -36,6 +61,8 @@ def collect_and_write_user_table(user_address, first_deposit_date, max_date, min
 
     # Wait for the whole script to finish.
     rows_iterable = parent_job.result()
+    # TODO: Convert to logging
+    # TODO: Add cloud monitoring and cloud logging to etl pipelines
     # print("Script created {} child jobs.".format(parent_job.num_child_jobs))
 
     # Fetch result rows for the final sub-job in the script.

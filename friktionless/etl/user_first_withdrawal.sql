@@ -1,5 +1,13 @@
 # user_first_withdrawal_sql
 
+/*
+    The user firsts table sql creates a single record of all first withdrawal activites for a user.
+
+    It depends on the transactions.fact_withdrawals table
+    
+    TODO: move this a streaming processing format - See Apache Beam executed on Google Dataflow.
+*/
+
 with first_withdrawal_dt as (
     select user_address, min(date(withdrawal_initiated_ts)) as first_withdrawal_dt 
     from transactions.fact_withdrawals group by user_address

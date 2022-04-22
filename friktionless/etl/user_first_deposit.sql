@@ -1,5 +1,14 @@
 # user_first_deposit_sql
 
+/*
+    The user firsts table sql creates a single record of all first deposit activites for a user.
+
+    It depends on the transactions.fact_deposits table
+    
+    TODO: move this a streaming processing format - See Apache Beam executed on Google Dataflow.
+*/
+
+
 with first_deposit_dt as (
     select user_address, min(date(deposit_initiated_ts)) as first_deposit_dt 
     from transactions.fact_deposits group by user_address

@@ -293,13 +293,11 @@ def write_user_table():
         job_config=job_config,
     )  # Make an API request.
 
-    try:
-        load_job.result()  # Waits for the job to complete.
 
-        destination_table = client.get_table(table_id)
-        print("Loaded {} rows.".format(destination_table.num_rows))
-    except BadRequest:
-        return load_job
+    load_job.result()  # Waits for the job to complete.
+
+    destination_table = client.get_table(table_id)
+    print("Loaded {} rows.".format(destination_table.num_rows))
     
 def write_mvp_user_table():
     # load it bigquery
