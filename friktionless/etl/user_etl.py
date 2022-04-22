@@ -293,6 +293,72 @@ def write_user_table():
         job_config=job_config,
     )  # Make an API request.
 
+    try:
+        load_job.result()  # Waits for the job to complete.
+
+        destination_table = client.get_table(table_id)
+        print("Loaded {} rows.".format(destination_table.num_rows))
+    except BadRequest:
+        return load_job
+    
+def write_mvp_user_table():
+    # load it bigquery
+    print('loading to bigquery')
+    # Construct a BigQuery client object.
+    client = bigquery.Client()
+
+    # Set table_id to the ID of the table to create.
+    table_id = "lyrical-amulet-337502.users.friktion_users"
+
+    user_table_schema = [
+        bigquery.SchemaField("user_address", "STRING", mode="REQUIRED"),
+        bigquery.SchemaField("as_of_date", "DATE", mode="REQUIRED"),
+        # bigquery.SchemaField("sol_balance", "FLOAT64", mode="REQUIRED"),
+        # bigquery.SchemaField("ever_lightning_og_holder", "BOOL"),
+        # bigquery.SchemaField("is_lightning_og_holder", "BOOL"),
+        # bigquery.SchemaField("nummber_lightning_ogs_held", "INT64"),
+        bigquery.SchemaField("total_value_locked_USD", "FLOAT64"),
+        bigquery.SchemaField("total_deposits_usd", "FLOAT64"),
+        bigquery.SchemaField("total_withdrawals_usd", "FLOAT64"),
+        bigquery.SchemaField("tvl_delta_30_day", "FLOAT64"),
+        bigquery.SchemaField("tvl_delta_60_day", "FLOAT64"),
+        bigquery.SchemaField("tvl_delta_90_day", "FLOAT64"),
+        bigquery.SchemaField("first_deposit_date", "DATE"),
+        bigquery.SchemaField("first_deposit_epoch", "INT64", mode="REPEATED"),
+        bigquery.SchemaField("first_deposit_amount", "FLOAT64"),
+        bigquery.SchemaField("first_deposit_token", "STRING", mode="REPEATED"),
+        bigquery.SchemaField("last_deposit_date", "DATE"),
+        bigquery.SchemaField("last_deposit_epoch", "INT64", mode='REPEATED'),
+        bigquery.SchemaField("last_deposit_amt", "FLOAT64"),
+        bigquery.SchemaField("last_deposit_token", "STRING", mode='REPEATED'),
+        bigquery.SchemaField("days_since_last_deposit", "INT64"),
+        bigquery.SchemaField("first_withdrawal_date", "DATE"),
+        bigquery.SchemaField("first_withdrawal_epoch", "INT64", mode='REPEATED'),
+        bigquery.SchemaField("first_withdrawal_amount", "FLOAT64"),
+        bigquery.SchemaField("first_withdrawal_token", "STRING", mode='REPEATED'),
+        bigquery.SchemaField("last_withdrawal_date", "DATE"),
+        bigquery.SchemaField("last_withdrawal_epoch", "INT64", mode='REPEATED'),
+        bigquery.SchemaField("last_withdrawal_amt", "FLOAT64"),
+        bigquery.SchemaField("last_withdrawal_token", "STRING", mode='REPEATED'),
+        bigquery.SchemaField("has_churned", "BOOL"),
+        bigquery.SchemaField("churn_date", "DATE"),
+    ]
+
+    #configure the job - schema and source format
+    job_config = bigquery.LoadJobConfig(
+        schema=user_table_schema,
+        source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
+        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
+    )
+    uri = "gs://friktion-users-prod/user-*.json"
+
+    load_job = client.load_table_from_uri(
+        uri,
+        table_id,
+        location="US",  # Must match the destination dataset location.
+        job_config=job_config,
+    )  # Make an API request.
+
     load_job.result()  # Waits for the job to complete.
 
     destination_table = client.get_table(table_id)

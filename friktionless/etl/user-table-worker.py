@@ -67,6 +67,15 @@ def collect_and_write_user_table(user_address, first_deposit_date, max_date, min
         user_df = client.get_job(job.job_id).to_dataframe().sort_values('as_of_date')
         break
     
+    # reformat the output so it's ready for BigQuery ingest
+    print('formatting dates')
+    user_df.as_of_date = user_df.as_of_date.apply(date.isoformat)
+    user_df.first_deposit_date = user_df.first_deposit_date.apply(date.isoformat)
+    user_df.first_withdrawal_date = user_df.first_withdrawal_date.apply(date.isoformat)
+    user_df.last_withdrawal_date = user_df.last_withdrawal_date.apply(date.isoformat)
+    user_df.last_deposit_date = user_df.last_deposit_date.apply(date.isoformat)
+    user_df.churn_date = user_df.churn_date.apply(date.isoformat)
+    
     user_df.to_json(f'gcs://friktion-users-prod/user-{user_address}.json', orient='records', date_format='iso', lines=True, date_unit='s')
     if print_true:
         print(f'Written to gcs://friktion-users-prod/user-{user_address}.json')
