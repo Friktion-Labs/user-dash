@@ -8,6 +8,8 @@
 - Average Transaction size
   - Per Volt and asset
 
+- Entropy History tracking
+
 ### Desired Features -- once you claim one, please edit readme to include Grant proposal :)
 
 - Deposits and withdrawal bars (and net line) per asset (claimed: @msquaredsa-ds-dev)
