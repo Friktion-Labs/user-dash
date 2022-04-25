@@ -8,6 +8,8 @@
 - Average Transaction size
   - Per Volt and asset
 
+- Adds a discord bot for enabling tracking of keeper rewards
+
 ### Desired Features -- once you claim one, please edit readme to include Grant proposal :)
 
 - Deposits and withdrawal bars (and net line) per asset (claimed: @msquaredsa-ds-dev)
